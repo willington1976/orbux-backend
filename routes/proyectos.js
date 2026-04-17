@@ -30,8 +30,8 @@ router.post('/', auth, async (req, res) => {
       `INSERT INTO proyectos
         (nombre,ubicacion,descripcion,video360,whatsapp,tagline,hero_foto,
          ubicacion_mapa,amenidades,alojamientos,tipo_lugar,color_acento,
-         hero_tipo,hero_video,modulos,orden_secciones,stats)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`,
+         hero_tipo,hero_video,modulos,orden_secciones)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16) RETURNING *`,
       [nombre,ubicacion,descripcion,video360,whatsapp,tagline,hero_foto,
        ubicacion_mapa,
        JSON.stringify(amenidades||[]),
@@ -41,8 +41,7 @@ router.post('/', auth, async (req, res) => {
        hero_tipo||'imagen',
        hero_video,
        JSON.stringify(modulos||['galeria','amenidades','alojamiento','video360','mapa','contacto']),
-       JSON.stringify(orden_secciones||['galeria','amenidades','alojamiento','video360','mapa','contacto']),
-       JSON.stringify(stats||[])
+       JSON.stringify(orden_secciones||['galeria','amenidades','alojamiento','video360','mapa','contacto'])
       ]
     );
     res.json(result.rows[0]);
@@ -56,7 +55,7 @@ router.put('/:id', auth, async (req, res) => {
     const {
       nombre,ubicacion,descripcion,video360,activo,whatsapp,tagline,
       hero_foto,ubicacion_mapa,amenidades,alojamientos,tipo_lugar,
-      color_acento,hero_tipo,hero_video,modulos,orden_secciones,stats
+      color_acento,hero_tipo,hero_video,modulos,orden_secciones
     } = req.body;
     const result = await pool.query(
       `UPDATE proyectos SET
@@ -64,8 +63,8 @@ router.put('/:id', auth, async (req, res) => {
         whatsapp=$6,tagline=$7,hero_foto=$8,ubicacion_mapa=$9,
         amenidades=$10,alojamientos=$11,tipo_lugar=$12,
         color_acento=$13,hero_tipo=$14,hero_video=$15,
-        modulos=$16,orden_secciones=$17,stats=$18
-       WHERE id=$19 RETURNING *`,
+        modulos=$16,orden_secciones=$17
+       WHERE id=$18 RETURNING *`,
       [nombre,ubicacion,descripcion,video360,activo,
        whatsapp,tagline,hero_foto,ubicacion_mapa,
        JSON.stringify(amenidades||[]),
@@ -76,7 +75,6 @@ router.put('/:id', auth, async (req, res) => {
        hero_video,
        JSON.stringify(modulos||['galeria','amenidades','alojamiento','video360','mapa','contacto']),
        JSON.stringify(orden_secciones||['galeria','amenidades','alojamiento','video360','mapa','contacto']),
-       JSON.stringify(stats||[]),
        req.params.id
       ]
     );
