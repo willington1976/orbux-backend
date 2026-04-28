@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo · ORBUX</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ac:#c9a84c;--ac2:#b8952e;--negro:#0d0f0a;--negro2:#141710;--negro3:#1c2018;--gris:#8a9a80;--blanco:#f5f2eb;}
+body.tema-azul{--ac:#2e7cbf;--ac2:#1a4f7a;--negro:#080c14;--negro2:#0f1419;--negro3:#141c24;--gris:#8a9ab0;--blanco:#f0ede8;}
+body.tema-verde{--ac:#4a8c42;--ac2:#2d5a27;--negro:#080f08;--negro2:#0f160e;--negro3:#141d12;--gris:#8a9a80;--blanco:#f0f5ee;}
+body.tema-coral{--ac:#c0392b;--ac2:#962d22;--negro:#100808;--negro2:#180f0e;--negro3:#1e1412;--gris:#9a8a8a;--blanco:#f5eeee;}
+body.tema-gris{--ac:#8a9ab0;--ac2:#6b7a8d;--negro:#0a0a0c;--negro2:#12141a;--negro3:#181b22;--gris:#8a9ab0;--blanco:#f0ede8;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--negro);color:rgba(245,242,235,0.92);font-family:'Lato',sans-serif;font-weight:300;font-size:16px;line-height:1.7;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:68px;background:rgba(13,15,10,0.95);border-bottom:1px solid rgba(201,168,76,0.12);backdrop-filter:blur(14px);}
+.nav-logo{font-family:'Playfair Display',serif;font-size:17px;color:var(--blanco);letter-spacing:1px;}
+.nav-logo span{color:var(--ac);}
+.nav-sub{font-size:11px;color:rgba(245,242,235,0.4);letter-spacing:2px;text-transform:uppercase;margin-left:12px;}
+.nav-orbux{font-size:11px;color:rgba(245,242,235,0.35);letter-spacing:1px;text-decoration:none;}
+.nav-orbux:hover{color:var(--ac);}
+
+.hero-cat{padding:120px 2.5rem 4rem;text-align:center;border-bottom:1px solid rgba(255,255,255,0.05);}
+.hero-cat .eyebrow{font-size:11px;letter-spacing:4px;color:var(--ac);text-transform:uppercase;margin-bottom:1rem;display:block;}
+.hero-cat h1{font-family:'Playfair Display',serif;font-size:clamp(36px,5vw,64px);font-weight:400;margin-bottom:1rem;color:#fff;}
+.hero-cat h1 em{font-style:italic;color:var(--ac);}
+.hero-cat p{font-size:15px;color:rgba(245,242,235,0.6);max-width:480px;margin:0 auto;}
+
+.filtros-bar{background:var(--negro2);border-bottom:1px solid rgba(255,255,255,0.05);padding:1.25rem 2.5rem;position:sticky;top:68px;z-index:100;}
+.filtros-inner{max-width:1200px;margin:0 auto;display:flex;gap:1rem;flex-wrap:wrap;align-items:center;}
+.filtro-select{background:var(--negro3);border:1px solid rgba(255,255,255,0.08);color:rgba(245,242,235,0.8);padding:9px 14px;font-size:12px;font-family:'Lato',sans-serif;cursor:pointer;min-width:140px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a9a80' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
+.filtro-select:focus{outline:none;border-color:var(--ac);}
+.filtro-input{background:var(--negro3);border:1px solid rgba(255,255,255,0.08);color:rgba(245,242,235,0.8);padding:9px 14px;font-size:12px;font-family:'Lato',sans-serif;min-width:160px;}
+.filtro-input:focus{outline:none;border-color:var(--ac);}
+.filtro-input::placeholder{color:rgba(245,242,235,0.3);}
+.btn-filtrar{background:var(--ac);color:var(--negro);padding:9px 22px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;font-family:'Lato',sans-serif;transition:background 0.2s;}
+.btn-filtrar:hover{background:var(--ac2);}
+.btn-limpiar{background:none;border:1px solid rgba(255,255,255,0.1);color:rgba(245,242,235,0.5);padding:9px 16px;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:'Lato',sans-serif;transition:all 0.2s;}
+.btn-limpiar:hover{border-color:rgba(255,255,255,0.3);color:rgba(245,242,235,0.8);}
+.filtros-count{font-size:12px;color:rgba(245,242,235,0.4);margin-left:auto;letter-spacing:1px;}
+
+.catalogo-main{max-width:1200px;margin:0 auto;padding:3rem 2.5rem;}
+.catalogo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem;}
+
+.item-card{background:var(--negro2);border:1px solid rgba(255,255,255,0.06);overflow:hidden;cursor:pointer;transition:transform 0.3s,box-shadow 0.3s,border-color 0.3s;border-radius:8px;}
+.item-card:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(0,0,0,0.5);border-color:rgba(201,168,76,0.3);}
+.item-foto{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--negro3);}
+.item-foto img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s;}
+.item-card:hover .item-foto img{transform:scale(1.04);}
+.item-foto-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:rgba(245,242,235,0.2);font-size:12px;letter-spacing:2px;}
+.item-badge{position:absolute;top:12px;left:12px;background:var(--ac);color:var(--negro);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:4px;}
+.item-badge-tipo{position:absolute;top:12px;right:12px;background:rgba(13,15,10,0.85);color:rgba(245,242,235,0.8);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:4px;backdrop-filter:blur(8px);}
+.item-body{padding:1.25rem;}
+.item-nombre{font-family:'Playfair Display',serif;font-size:18px;font-weight:400;color:#fff;margin-bottom:4px;line-height:1.3;}
+.item-ubicacion{font-size:12px;color:rgba(245,242,235,0.45);letter-spacing:1px;margin-bottom:1rem;}
+.item-specs{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;}
+.item-spec{font-size:11px;color:rgba(245,242,235,0.55);display:flex;align-items:center;gap:4px;}
+.item-spec strong{color:rgba(245,242,235,0.85);font-weight:700;}
+.item-precio{font-family:'Playfair Display',serif;font-size:20px;color:var(--ac);margin-bottom:1rem;}
+.item-precio span{font-size:12px;font-family:'Lato',sans-serif;color:rgba(245,242,235,0.4);font-weight:300;}
+.item-cta{display:flex;gap:8px;}
+.btn-ver{flex:1;background:var(--ac);color:var(--negro);padding:10px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;font-family:'Lato',sans-serif;text-align:center;transition:background 0.2s;border:none;cursor:pointer;border-radius:4px;}
+.btn-ver:hover{background:var(--ac2);}
+.btn-wa-small{background:#25D366;color:#fff;padding:10px 14px;border:none;cursor:pointer;border-radius:4px;display:flex;align-items:center;transition:background 0.2s;}
+.btn-wa-small:hover{background:#1ea855;}
+
+.empty-state{grid-column:span 3;text-align:center;padding:5rem 2rem;}
+.empty-state h3{font-family:'Playfair Display',serif;font-size:24px;font-weight:400;color:rgba(245,242,235,0.5);margin-bottom:1rem;}
+.empty-state p{font-size:14px;color:rgba(245,242,235,0.3);}
+
+.loading-state{grid-column:span 3;text-align:center;padding:4rem;color:rgba(245,242,235,0.3);font-size:13px;letter-spacing:2px;}
+
+footer{border-top:1px solid rgba(255,255,255,0.05);padding:2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+footer p{font-size:11px;color:rgba(245,242,235,0.25);letter-spacing:1px;}
+footer a{color:var(--ac);text-decoration:none;}
+
+.wa-float{position:fixed;bottom:2rem;right:2rem;z-index:300;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;text-decoration:none;animation:waPulse 2.5s infinite;}
+@keyframes waPulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,0.35);}50%{box-shadow:0 4px 36px rgba(37,211,102,0.65);}}
+
+@media(max-width:900px){.catalogo-grid{grid-template-columns:repeat(2,1fr);}.empty-state{grid-column:span 2;}.loading-state{grid-column:span 2;}}
+@media(max-width:600px){.catalogo-grid{grid-template-columns:1fr;}.empty-state,.loading-state{grid-column:span 1;}.filtros-inner{flex-direction:column;align-items:stretch;}.filtros-count{margin-left:0;}.nav-sub{display:none;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div style="display:flex;align-items:center;">
+    <div class="nav-logo" id="navLogo">Catálogo <span>ORBUX</span></div>
+    <span class="nav-sub" id="navSub"></span>
+  </div>
+  <a href="https://orbux.site" class="nav-orbux">orbux.site →</a>
+</nav>
+
+<div class="hero-cat" id="heroCat">
+  <span class="eyebrow" id="heroEyebrow">catálogo</span>
+  <h1 id="heroTitle">Encuentra lo que <em>buscas</em></h1>
+  <p id="heroDesc">Explora nuestro inventario completo. Haz clic en cualquier ítem para ver el micrositio detallado.</p>
+</div>
+
+<div class="filtros-bar">
+  <div class="filtros-inner">
+    <select class="filtro-select" id="filtroTipo" onchange="aplicarFiltros()">
+      <option value="">Todos los tipos</option>
+    </select>
+    <input class="filtro-input" type="text" id="filtroUbicacion" placeholder="Ciudad / Ubicación" oninput="aplicarFiltros()">
+    <input class="filtro-input" type="text" id="filtroPrecioMin" placeholder="Precio mínimo" oninput="aplicarFiltros()" style="max-width:130px;">
+    <input class="filtro-input" type="text" id="filtroPrecioMax" placeholder="Precio máximo" oninput="aplicarFiltros()" style="max-width:130px;">
+    <select class="filtro-select" id="filtroAnio" onchange="aplicarFiltros()" style="display:none;">
+      <option value="">Todos los años</option>
+    </select>
+    <button class="btn-limpiar" onclick="limpiarFiltros()">Limpiar</button>
+    <span class="filtros-count" id="filtrosCount"></span>
+  </div>
+</div>
+
+<div class="catalogo-main">
+  <div class="catalogo-grid" id="catalogoGrid">
+    <div class="loading-state">Cargando catálogo...</div>
+  </div>
+</div>
+
+<footer>
+  <p id="footerNombre">Catálogo · ORBUX</p>
+  <p>Micrositios producidos por <a href="https://orbux.site" target="_blank">ORBUX</a> · Fotografía aérea profesional</p>
+</footer>
+
+<a class="wa-float" id="waFloat" href="https://wa.me/573133747681" target="_blank">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.859L.057 23.625a.75.75 0 00.918.918l5.771-1.476A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.96 0-3.807-.536-5.393-1.471l-.385-.229-3.99 1.021 1.023-3.877-.247-.396A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+</a>
+
+<script>
+const API='https://orbux-backend.onrender.com/api';
+const params=new URLSearchParams(window.location.search);
+const clienteSlug=params.get('cliente');
+const modoParam=params.get('modo'); // 'inmobiliaria' o 'vehiculos'
+
+const TIPOS_INMOBILIARIA=['casa','apartamento','lote','oficina','bodega','local'];
+const TIPOS_VEHICULOS=['carro','moto','camioneta','tractomula','automovil'];
+
+let todosProyectos=[];
+let proyectosFiltrados=[];
+let modo='inmobiliaria';
+
+function parseJSON(val,def){
+  if(Array.isArray(val))return val;
+  if(typeof val==='string'){try{return JSON.parse(val);}catch{return def;}}
+  return def;
+}
+
+function getStats(p){return parseJSON(p.stats,[]);}
+function getStat(p,lbl){
+  const s=getStats(p).find(x=>x.lbl&&x.lbl.toLowerCase().includes(lbl.toLowerCase()));
+  return s?s.num:'';
+}
+function getPrecio(p){return getStat(p,'precio')||getStat(p,'valor')||getStat(p,'price')||'';}
+function getAnio(p){return getStat(p,'año')||getStat(p,'model')||getStat(p,'modelo')||'';}
+function getArea(p){return getStat(p,'m²')||getStat(p,'area')||getStat(p,'área')||getStat(p,'mt')||'';}
+function getKm(p){return getStat(p,'km')||getStat(p,'kilómetros')||getStat(p,'kilometros')||'';}
+
+async function init(){
+  try{
+    const res=await fetch(`${API}/proyectos`);
+    const todos=await res.json();
+
+    // Detectar modo según tipo_lugar de los proyectos o parámetro URL
+    if(modoParam){modo=modoParam;}
+    else{
+      const tiposVeh=todos.filter(p=>TIPOS_VEHICULOS.includes(p.tipo_lugar));
+      const tiposInm=todos.filter(p=>TIPOS_INMOBILIARIA.includes(p.tipo_lugar));
+      if(tiposVeh.length>tiposInm.length)modo='vehiculos';
+    }
+
+    // Filtrar por cliente si hay slug
+    todosProyectos=clienteSlug
+      ? todos.filter(p=>p.nombre.toLowerCase().includes(clienteSlug.toLowerCase())||p.ubicacion?.toLowerCase().includes(clienteSlug.toLowerCase()))
+      : todos.filter(p=>modo==='vehiculos'?TIPOS_VEHICULOS.includes(p.tipo_lugar):TIPOS_INMOBILIARIA.includes(p.tipo_lugar));
+
+    configurarUI();
+    proyectosFiltrados=[...todosProyectos];
+    renderCatalogo();
+  }catch(e){
+    document.getElementById('catalogoGrid').innerHTML='<div class="loading-state">Error cargando el catálogo</div>';
+  }
+}
+
+function configurarUI(){
+  const esVeh=modo==='vehiculos';
+  document.getElementById('heroEyebrow').textContent=esVeh?'concesionaria · inventario':'inmobiliaria · propiedades';
+  document.getElementById('heroTitle').innerHTML=esVeh?'Encuentra tu próximo <em>vehículo</em>':'Encuentra tu próxima <em>propiedad</em>';
+  document.getElementById('heroDesc').textContent=esVeh?'Explora nuestro inventario de vehículos. Haz clic en cualquier ítem para ver todos los detalles y fotos.':'Explora todas las propiedades disponibles. Haz clic en cualquier ítem para ver fotos aéreas, ubicación y detalles completos.';
+  document.getElementById('navSub').textContent=esVeh?'Vehículos':'Propiedades';
+
+  // Tipos según modo
+  const tipos=esVeh?TIPOS_VEHICULOS:TIPOS_INMOBILIARIA;
+  const sel=document.getElementById('filtroTipo');
+  tipos.forEach(t=>{
+    const opt=document.createElement('option');
+    opt.value=t;opt.textContent=t.charAt(0).toUpperCase()+t.slice(1);
+    sel.appendChild(opt);
+  });
+
+  // Mostrar filtro año solo para vehículos
+  if(esVeh){
+    document.getElementById('filtroAnio').style.display='block';
+    // Poblar años únicos
+    const anios=[...new Set(todosProyectos.map(p=>getAnio(p)).filter(Boolean))].sort().reverse();
+    const selA=document.getElementById('filtroAnio');
+    anios.forEach(a=>{const o=document.createElement('option');o.value=a;o.textContent=a;selA.appendChild(o);});
+  }
+
+  // WA del primer proyecto o default
+  if(todosProyectos.length&&todosProyectos[0].whatsapp){
+    document.getElementById('waFloat').href='https://wa.me/'+todosProyectos[0].whatsapp;
+  }
+}
+
+function aplicarFiltros(){
+  const tipo=document.getElementById('filtroTipo').value.toLowerCase();
+  const ubicacion=document.getElementById('filtroUbicacion').value.toLowerCase();
+  const precioMin=parseInt(document.getElementById('filtroPrecioMin').value.replace(/\D/g,''))||0;
+  const precioMax=parseInt(document.getElementById('filtroPrecioMax').value.replace(/\D/g,''))||Infinity;
+  const anio=document.getElementById('filtroAnio').value;
+
+  proyectosFiltrados=todosProyectos.filter(p=>{
+    if(tipo&&p.tipo_lugar!==tipo)return false;
+    if(ubicacion&&!p.ubicacion?.toLowerCase().includes(ubicacion))return false;
+    if(anio&&getAnio(p)!==anio)return false;
+    const precio=parseInt(getPrecio(p).replace(/\D/g,''))||0;
+    if(precio&&(precio<precioMin||precio>precioMax))return false;
+    return true;
+  });
+  renderCatalogo();
+}
+
+function limpiarFiltros(){
+  document.getElementById('filtroTipo').value='';
+  document.getElementById('filtroUbicacion').value='';
+  document.getElementById('filtroPrecioMin').value='';
+  document.getElementById('filtroPrecioMax').value='';
+  document.getElementById('filtroAnio').value='';
+  proyectosFiltrados=[...todosProyectos];
+  renderCatalogo();
+}
+
+function renderCatalogo(){
+  const grid=document.getElementById('catalogoGrid');
+  document.getElementById('filtrosCount').textContent=proyectosFiltrados.length+' resultado'+(proyectosFiltrados.length!==1?'s':'');
+
+  if(!proyectosFiltrados.length){
+    grid.innerHTML='<div class="empty-state"><h3>Sin resultados</h3><p>Intenta con otros filtros o consulta directamente por WhatsApp.</p></div>';
+    return;
+  }
+
+  const esVeh=modo==='vehiculos';
+  grid.innerHTML=proyectosFiltrados.map(p=>{
+    const fotos=p.fotos||[];
+    const fotoPortada=p.hero_foto||(fotos.length?fotos[0].url:'');
+    const precio=getPrecio(p);
+    const anio=getAnio(p);
+    const area=getArea(p);
+    const km=getKm(p);
+    const wa=p.whatsapp||'573133747681';
+    const waMsg=encodeURIComponent('Hola, vi el catálogo de ORBUX y me interesa: '+p.nombre);
+
+    const specs=esVeh?[
+      anio?'<span class="item-spec"><strong>'+anio+'</strong> Modelo</span>':'',
+      km?'<span class="item-spec"><strong>'+km+'</strong> Km</span>':'',
+    ].filter(Boolean).join(''):
+    [
+      area?'<span class="item-spec"><strong>'+area+'</strong> Área</span>':'',
+      p.ubicacion?'<span class="item-spec">'+p.ubicacion+'</span>':'',
+    ].filter(Boolean).join('');
+
+    return `<div class="item-card" onclick="verMicrositio(${p.id})">
+      <div class="item-foto">
+        ${fotoPortada
+          ?`<img src="${fotoPortada}" alt="${p.nombre}" loading="lazy">`
+          :`<div class="item-foto-placeholder">Sin foto</div>`}
+        <span class="item-badge">${p.tipo_lugar||'propiedad'}</span>
+        ${precio?`<span class="item-badge-tipo">${precio}</span>`:''}
+      </div>
+      <div class="item-body">
+        <div class="item-nombre">${p.nombre}</div>
+        <div class="item-ubicacion">${p.ubicacion||''}</div>
+        <div class="item-specs">${specs}</div>
+        ${precio?`<div class="item-precio">${precio} <span>· Consultar</span></div>`:'<div class="item-precio" style="font-size:14px;color:rgba(245,242,235,0.4);">Precio a consultar</div>'}
+        <div class="item-cta">
+          <button class="btn-ver" onclick="event.stopPropagation();verMicrositio(${p.id})">Ver detalles →</button>
+          <button class="btn-wa-small" onclick="event.stopPropagation();window.open('https://wa.me/${wa}?text=${waMsg}','_blank')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.859L.057 23.625a.75.75 0 00.918.918l5.771-1.476A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.96 0-3.807-.536-5.393-1.471l-.385-.229-3.99 1.021 1.023-3.877-.247-.396A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function verMicrositio(id){
+  window.open('/proyecto.html?id='+id,'_blank');
+}
+
+init();
+</script>
+</body>
+</html>
