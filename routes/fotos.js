@@ -1,3 +1,6 @@
+// routes/fotos.js
+// OB-A04 fix: validación MIME antes de subir a Cloudinary
+// OB-A03 fix: errores internos no expuestos al cliente
 const router = require('express').Router();
 const cloudinary = require('cloudinary').v2;
 const pool = require('../db');
@@ -9,11 +12,19 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+const MIME_PERMITIDOS = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
 // POST subir foto con categoria opcional
 router.post('/subir/:proyecto_id', auth, async (req, res) => {
   try {
     if (!req.files?.foto) return res.status(400).json({ error: 'No se envió foto' });
     const file = req.files.foto;
+
+    // OB-A04: validar MIME type real del archivo
+    if (!MIME_PERMITIDOS.includes(file.mimetype)) {
+      return res.status(400).json({ error: 'Formato no permitido. Solo JPEG, PNG, WEBP o GIF.' });
+    }
+
     const categoria = req.body.categoria || 'general';
     const result = await cloudinary.uploader.upload(file.tempFilePath, {
       folder: `orbux/proyecto-${req.params.proyecto_id}`,
@@ -25,7 +36,8 @@ router.post('/subir/:proyecto_id', auth, async (req, res) => {
     );
     res.json(foto.rows[0]);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('[fotos/subir]', err);
+    res.status(500).json({ error: 'Error interno al subir foto' });
   }
 });
 
@@ -39,7 +51,8 @@ router.put('/:id/categoria', auth, async (req, res) => {
     );
     res.json(result.rows[0]);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('[fotos/categoria]', err);
+    res.status(500).json({ error: 'Error interno' });
   }
 });
 
@@ -52,7 +65,8 @@ router.delete('/:id', auth, async (req, res) => {
     await pool.query('DELETE FROM fotos WHERE id=$1', [req.params.id]);
     res.json({ ok: true });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('[fotos/delete]', err);
+    res.status(500).json({ error: 'Error interno al eliminar foto' });
   }
 });
 
